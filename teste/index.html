@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Teste</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <section id="app">
+    <template>
+      <div>
+        <h1>
+          {{formName}}
+        </h1>
+        <form @submit="checkForm" method="post">
+          <div class="field">
+            <label class="label">Name</label>
+            <input class="input" type="text" v-model="form.userName"/>
+          </div>
+
+          <div class="field">
+            <label class="label">Flags</label>
+            <select v-model="form">
+                <option v-for="flag in form.flagNames" :value="flag" >
+                  {{ flag.name }}
+                </option>
+            </select>
+          </div>
+          
+          <div class="field">
+            <label class="label">Favorite Color</label>
+            <select v-model="form.favoriteColor">
+              <option v-for="color in ['Red', 'Blue', 'Green']" :value="color">
+                {{color}}
+              </option>
+            </select>
+          </div>
+      
+          <div class="field">
+            <label class="label">Favorite Hamburger Place</label>
+            <div>
+              <label>
+                <input type="radio" value="whataburger" v-model="form.favoriteHamburger" />
+                Whataburger
+              </label>
+              <br>
+              <label>
+                <input type="radio" value="pterrys" v-model="form.favoriteHamburger" />
+                P.Terry's
+              </label>
+              <br>
+              <label>
+                <input type="radio" value="hopdoddy" v-model="form.favoriteHamburger" />
+                Hopdoddy
+              </label>
+            </div>
+          </div>
+      
+          <div class="field">
+            <label class="label">Favorite Hangout</label>
+            <div>
+              <label>
+                <input type="checkbox" value="barton-springs" v-model="form.favoriteHangout" />
+                Barton Springs
+              </label>
+              <br>
+              <label>
+                <input type="checkbox" value="zilker-park" v-model="form.favoriteHangout" />
+                Zilker Park
+              </label>
+              <br>
+              <label>
+                <input type="checkbox" value="sixth-stree" v-model="form.favoriteHangout" />
+                Sixth Street
+              </label>
+            </div>
+          </div>
+      
+          <div class="field">
+            <label class="label">How many hours a week do you work?</label>
+            <h4>
+              {{form.workHours}} / 44
+            </h4>
+            <input type="range" min="0" max="80" v-model="form.workHours"/>
+          </div>
+      
+          <input class="button" type="submit" @click.prevent="fakeSubmit" />
+      
+        </form>
+        
+        <transition name="fade" mode="out-in">
+          <article class="message" v-show="showSubmitFeedback">
+            <div class="message__header">
+              <p>Fake Send Status:</p>
+            </div>
+            <div class="message--body">
+              Successfully Submitted!
+            </div>
+          </article>
+        </transition>
+    
+        <hr>
+        
+        <h5>
+          JSON
+        </h5>
+        <pre><code>{{form}}</code></pre>
+      </div>
+    </template>
+  </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data() {
+        return {
+          formName: 'Tell Us About Yourself',
+          form: {
+            userName: '',
+            flagNames: [],
+            favoriteColor: 'Red',
+            favoriteHamburger: '',
+            favoriteHangout: [],
+            workHours: 0
+          },
+          showSubmitFeedback: false,
+        } 
+      },
+      methods: {
+        checkForm: function (e) {
+          e.preventDefault();
+        },
+        getFlags () {
+          axios.get('https://restcountries.eu/rest/v2/all?fields=name;flag')
+            .then(res => {
+              this.form.flagNames = res.data
+            })
+            .catch(err => {
+              console.log(err)
+            })
+        },
+        fakeSubmit() {
+          return this.showSubmitFeedback = true;
+        }
+      },
+      created () {
+        this.getFlags()
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+body {
+  font-family: sans-serif;
+}
+#app{
+  max-width: 500px;
+  background: #eee;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 0 auto;
+}
+form {
+  max-width: 500px;
+}
+form .button{
+  border: none;
+  padding: 10px;
+  background: #8b9043;
+  color: #ffffff;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+pre {
+  padding: 10px;
+  background-color: #ddd;
+}
+
+select {
+  width: 100px;
+}
+
+.message {
+  color: green;
+}
+
+.message__header {
+  font-weight: bold;
+}
+.message__header .message--body {
+  font-size: 20px;
+}
